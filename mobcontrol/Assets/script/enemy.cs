@@ -7,30 +7,29 @@ public class enemy : MonoBehaviour
     public float speed;
     public float can;
     public float hasar;
-
+    public float scale;
   
     private void FixedUpdate()
     {
         if (can <= 0) { StartCoroutine(die()); }
-        transform.Translate(0, 0, -speed * Time.fixedDeltaTime);
+        this.gameObject.transform.parent.transform.Translate(0, 0, -speed * Time.fixedDeltaTime);
+        scale = 0;
+        
+        this.gameObject.transform.parent.transform.localScale =new Vector3(1,1,1)*(1+(can-1)*0.25f);
+
     }
-     IEnumerator die()
+    public IEnumerator die()
     {
         hasar = 0;
         speed = 0;
         yield return new WaitForSecondsRealtime(1);
-        Destroy(this.gameObject);
+        Destroy(this.transform.parent.gameObject);
     }
-    private void OncollisionEnter(Collider collider)
-    {
-        if (collider.gameObject.tag == "dostkarakter")
-        {
-            can -= collider.gameObject.GetComponent<karakter>().hasar;
-        }
-    }
+    
+    
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("a");
+        
         if (other.gameObject.tag == "dostkarakter")
         {
             can -= other.gameObject.transform.parent.gameObject.GetComponent<karakter>().hasar;

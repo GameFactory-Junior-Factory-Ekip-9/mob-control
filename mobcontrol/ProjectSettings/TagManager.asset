@@ -7,6 +7,9 @@ TagManager:
   - silindir
   - enemy
   - dostkarakter
+  - "d\xFC\u015Fmankalesi"
+  - enemyhandler
+  - dostkarakterhandler
   layers:
   - Default
   - TransparentFX

@@ -14,29 +14,23 @@ public class karakter : MonoBehaviour
     private void FixedUpdate()
     {
        if (can <= 0) { StartCoroutine(die()); }
-        transform.Translate(0,0,speed*Time.fixedDeltaTime);
+       transform.Translate(0, 0, Time.fixedDeltaTime*speed);
+       
     }
     IEnumerator slowing()
     {
         for (int i = 0; i < 100; i++)
         {
-            speed -= 0.06f;
+            speed -= 0.03f;
             yield return new WaitForSecondsRealtime(0.005f);
         }
     }
-    private void OncollisionEnter(Collider collider)
-    {
-        Debug.Log("a");
-        if (collider.gameObject.tag== "enemy")
-        {
-            can -=collider.gameObject.GetComponent<enemy>().hasar;
-        }
-    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "enemy")
+        if (other.gameObject.tag == "silindir")
         {
-            can -= other.gameObject.transform.parent.gameObject.GetComponent<enemy>().hasar;
+            transform.LookAt(new Vector3(other.gameObject.transform.position.x,this.gameObject.transform.position.y, other.gameObject.transform.position.z));
 
 
         }
