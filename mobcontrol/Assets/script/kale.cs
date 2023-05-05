@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class kale : MonoBehaviour
 {
+    [SerializeField] int requiredround;
+    public GameObject lvlcontrol;
     public GameObject düþman;
     public float can;
     public int summonwave;
-    
+    public int summoncount;
+    public float summonperiod;
+    private void Awake()
+    {
+        lvlcontrol = GameObject.FindGameObjectWithTag("lvlcontrol");
+    }
     void Start()
     {
         StartCoroutine(summon());
@@ -22,32 +29,35 @@ public class kale : MonoBehaviour
     public IEnumerator summon()
     {
         summonwave = Random.Range(1, 3);
-        switch (summonwave)
+        if (requiredround == lvlcontrol.GetComponent<levelcontrol>().round&&lvlcontrol.GetComponent<levelcontrol>().cancontrol)
         {
-            case 1:
-                for (int i = 0; i < 20; i++)
-                {
-                    GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -4f, Random.Range(-1f, 1f)) / 4, Quaternion.identity);
-                    
-                    yield return new WaitForSecondsRealtime(0.01f);
-                }
-                break;
-            case 2:
-                for (int i = 0; i < 20; i++)
-                {
-                    GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -4f, Random.Range(-1f, 1f)) / 4, Quaternion.identity);
-                    
-                    if (i - 5 == 0) {
-                        newenemy.transform.GetChild(0).gameObject.GetComponent<enemy>().can = 3;
+            switch (summonwave)
+            {
+                case 1:
+                    for (int i = 0; i < summoncount && lvlcontrol.GetComponent<levelcontrol>().cancontrol; i++)
+                    {
+                        GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -4f, Random.Range(-1f, 1f)) / 4, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y, 0));
+
+                        yield return new WaitForSecondsRealtime(0.01f);
                     }
-                    yield return new WaitForSecondsRealtime(0.01f);
-                }
-                break;
-               
+                    break;
+                case 2:
+                    for (int i = 0; i < summoncount && lvlcontrol.GetComponent<levelcontrol>().cancontrol; i++)
+                    {
+                        GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -4f, Random.Range(-1f, 1f)) / 4, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y, 0));
+
+                        if (i - 5 == 0)
+                        {
+                            newenemy.transform.GetChild(0).gameObject.GetComponent<enemy>().can = 3;
+                        }
+                        yield return new WaitForSecondsRealtime(0.01f);
+                    }
+                    break;
+
+            }
         }
-       
         
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(summonperiod);
         StartCoroutine(summon());
 
 

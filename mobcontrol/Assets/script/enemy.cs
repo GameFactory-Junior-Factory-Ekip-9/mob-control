@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class enemy : MonoBehaviour
 {
+    public Animator animator;
     public float speed;
     public float can;
     public float hasar;
@@ -14,14 +15,15 @@ public class enemy : MonoBehaviour
         if (can <= 0) { StartCoroutine(die()); }
         this.gameObject.transform.parent.transform.Translate(0, 0, -speed * Time.fixedDeltaTime);
         scale = 0;
-        
-        this.gameObject.transform.parent.transform.localScale =new Vector3(1,1,1)*(1+(can-1)*0.25f);
+        if (can > 0) {  this.gameObject.transform.parent.transform.localScale =new Vector3(1,1,1)*(1+(can-1)*0.25f); }
+      
 
     }
     public IEnumerator die()
     {
         hasar = 0;
         speed = 0;
+        animator.SetBool("öldü", true);
         yield return new WaitForSecondsRealtime(1);
         Destroy(this.transform.parent.gameObject);
     }

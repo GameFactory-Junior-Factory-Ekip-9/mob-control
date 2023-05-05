@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class karakter : MonoBehaviour
 {
+    public Animator animator;
     public float speed;
     public float can;
     public float hasar;
@@ -38,6 +39,8 @@ public class karakter : MonoBehaviour
     public IEnumerator die() {
         hasar = 0;
         speed = 0;
+        this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        animator.SetBool("öldü", true);
         yield return new WaitForSecondsRealtime(1);
         Destroy(this.gameObject);
     }

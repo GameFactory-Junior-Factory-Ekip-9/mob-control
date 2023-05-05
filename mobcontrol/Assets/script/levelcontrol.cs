@@ -18,10 +18,23 @@ public class levelcontrol : MonoBehaviour
     [Header("objeler")]
     public GameObject kamera;
     public GameObject top;
+    public GameObject toptekerleri;
+    [Header("silindirler")]
     public GameObject silindir1;
     public GameObject silindir2;
     public GameObject silindir3;
     public GameObject silindir4;
+    [Header("dönmelerigerekenaçýlar")]
+    public Vector3 round1_2;
+    public Vector3 round2_3;
+    [Header("sonrakiroundiçingerekenkulesayýsý")]
+    public int round1için;
+    public int round2için;
+    public int round3için;
+    [Header("topalanlarý")]
+    public GameObject topalaný1;
+    public GameObject topalaný2;
+    public GameObject topalaný3;
     private void Start()
     {
         cancontrol = true;
@@ -29,15 +42,18 @@ public class levelcontrol : MonoBehaviour
     void Update()
     {
         kaleler = GameObject.FindGameObjectsWithTag("düþmankalesi");
-        if (kaleler.Length == 3) { round = 1; }
-        if (kaleler.Length == 2) { round = 2; }
-        if (kaleler.Length == 1) { round = 3; }
+        if (kaleler.Length == round1için) { round = 1; }
+        if (kaleler.Length == round2için) { round = 2; }
+        if (kaleler.Length == round3için) { round = 3; }
+        
         if (round == 2 && !birdenikiye) {birdenikiye = true; StartCoroutine(roundbirdenikiyeanimasyon());  }
+        if (round == 3 && !ikidenüçe) { ikidenüçe = true; StartCoroutine(roundikidenüçeanimasyon()); }
+        if(kaleler.Length==0&&!üçtensona){ üçtensona = true; StartCoroutine(roundüçtensonaanimasyon()); }
 
     }
     public IEnumerator roundbirdenikiyeanimasyon() {
         cancontrol = false;
-        top.transform.GetChild(0).transform.position = new Vector3(0,0,5.4f);
+        top.transform.GetChild(0).transform.DOLocalMove(new Vector3(0,0,0),0.1f);
         
         #region karakterlerivedüþmanlarýyoketme
         karakterler = GameObject.FindGameObjectsWithTag("dostkarakterhandler");
@@ -54,18 +70,89 @@ public class levelcontrol : MonoBehaviour
         #endregion
 
         yield return new WaitForSecondsRealtime(1);
-
+        
         #region animasyon
         kamera.transform.SetParent(top.transform);
+        toptekerleri.transform.DOLocalRotate(new Vector3(0, 90, 0), 1);
         top.transform.DOMove(new Vector3(silindir2.transform.position.x,top.transform.position.y, silindir2.transform.position.z),3);
         yield return new WaitForSecondsRealtime(3);
-        top.transform.DORotate(new Vector3(0,45,0),1);
+        top.transform.DORotate(new Vector3(0, round1_2.y, 0),1);
         yield return new WaitForSecondsRealtime(1);
-        top.transform.DOMove(new Vector3(4f, top.transform.position.y, 46.67f), 1);
+        top.transform.DOMove(new Vector3(topalaný2.transform.position.x, top.transform.position.y, topalaný2.transform.position.z), 1);
+        yield return new WaitForSecondsRealtime(1);
+        toptekerleri.transform.DOLocalRotate(new Vector3(0, 0, 0), 1);
         yield return new WaitForSecondsRealtime(1);
         kamera.transform.SetParent(null);
         #endregion
 
         cancontrol = true;
+    }
+    public IEnumerator roundikidenüçeanimasyon()
+    {
+        cancontrol = false;
+        top.transform.GetChild(0).transform.DOLocalMove(new Vector3(0, 0, 0), 0.1f);
+
+        #region karakterlerivedüþmanlarýyoketme
+        karakterler = GameObject.FindGameObjectsWithTag("dostkarakterhandler");
+        enemies = GameObject.FindGameObjectsWithTag("enemyhandler");
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            StartCoroutine(enemies[i].gameObject.transform.GetChild(0).gameObject.GetComponent<enemy>().die());
+        }
+
+        for (int i = 0; i < karakterler.Length; i++)
+        {
+            StartCoroutine(karakterler[i].gameObject.GetComponent<karakter>().die());
+        }
+        #endregion
+
+        yield return new WaitForSecondsRealtime(1);
+
+        #region animasyon
+        kamera.transform.SetParent(top.transform);
+        toptekerleri.transform.DOLocalRotate(new Vector3(0,90,0), 1);
+        top.transform.DOMove(new Vector3(silindir3.transform.position.x, top.transform.position.y, silindir3.transform.position.z), 3);
+        yield return new WaitForSecondsRealtime(3);
+        top.transform.DORotate(new Vector3(0,round2_3.y, 0), 1);
+        yield return new WaitForSecondsRealtime(1);
+        top.transform.DOMove(new Vector3(topalaný3.transform.position.x, top.transform.position.y, topalaný3.transform.position.z), 1);
+        yield return new WaitForSecondsRealtime(1);
+        toptekerleri.transform.DOLocalRotate(new Vector3(0, 0, 0), 1);
+        yield return new WaitForSecondsRealtime(1);
+        kamera.transform.SetParent(null);
+        #endregion
+
+        cancontrol = true;
+    }
+    public IEnumerator roundüçtensonaanimasyon()
+    {
+        cancontrol = false;
+        top.transform.GetChild(0).transform.DOLocalMove(new Vector3(0, 0, 0), 0.1f);
+
+        #region karakterlerivedüþmanlarýyoketme
+        karakterler = GameObject.FindGameObjectsWithTag("dostkarakterhandler");
+        enemies = GameObject.FindGameObjectsWithTag("enemyhandler");
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            StartCoroutine(enemies[i].gameObject.transform.GetChild(0).gameObject.GetComponent<enemy>().die());
+        }
+
+        for (int i = 0; i < karakterler.Length; i++)
+        {
+            StartCoroutine(karakterler[i].gameObject.GetComponent<karakter>().die());
+        }
+        #endregion
+
+        yield return new WaitForSecondsRealtime(1);
+
+        #region animasyon
+        kamera.transform.SetParent(top.transform);
+        toptekerleri.transform.DOLocalRotate(new Vector3(0, 90, 0), 1);
+        top.transform.DOMove(new Vector3(silindir4.transform.position.x, top.transform.position.y, silindir4.transform.position.z), 3);
+        yield return new WaitForSecondsRealtime(3);
+        kamera.transform.SetParent(null);
+        #endregion
+
+       
     }
 }

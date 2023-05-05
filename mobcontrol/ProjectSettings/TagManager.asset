@@ -10,6 +10,7 @@ TagManager:
   - "d\xFC\u015Fmankalesi"
   - enemyhandler
   - dostkarakterhandler
+  - lvlcontrol
   layers:
   - Default
   - TransparentFX
