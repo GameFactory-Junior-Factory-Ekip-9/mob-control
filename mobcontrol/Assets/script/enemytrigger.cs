@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class enemytrigger : MonoBehaviour
 {
+    private void FixedUpdate()
+    {
+        this.transform.localPosition = Vector3.zero;
+    }
     private void OnTriggerEnter(Collider other)
     {
 

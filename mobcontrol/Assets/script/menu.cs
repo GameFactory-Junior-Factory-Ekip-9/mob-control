@@ -8,8 +8,7 @@ public class menu : MonoBehaviour
 {
     [SerializeField] GameObject menupart;
     [SerializeField] GameObject startpart;
-
-
+    public GameObject levelcontrol;
     public void OpenandCloseMenu()
     {
         menupart.gameObject.SetActive(!menupart.gameObject.activeSelf);
@@ -17,12 +16,12 @@ public class menu : MonoBehaviour
     public void CloseMenu() { menupart.gameObject.SetActive(false); }
     private void Start()
     {
-        Time.timeScale = 0;
+        levelcontrol.GetComponent<levelcontrol>().cancontrol = false;
         startpart.SetActive(true);
     }
     public void StartGame()
     {
-        Time.timeScale = 1;
+        levelcontrol.GetComponent<levelcontrol>().cancontrol = true;
         startpart.SetActive(false);
     }
 

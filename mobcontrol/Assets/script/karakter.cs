@@ -4,16 +4,31 @@ using UnityEngine;
 
 public class karakter : MonoBehaviour
 {
+    public bool lookat;
+    public bool issuper;
     public Animator animator;
     public float speed;
     public float can;
     public float hasar;
+    public GameObject[] kaleler;
+    public GameObject levelcontrol; 
+    private void Awake()
+    {
+        levelcontrol = GameObject.FindGameObjectWithTag("lvlcontrol");
+    }
     private void Start()
     {
         StartCoroutine(slowing());
     }
     private void FixedUpdate()
     {
+        if (lookat) { for (int i = 0; i < kaleler.Length; i++)
+            {
+                if (kaleler[i].GetComponent<kale>().requiredround == levelcontrol.GetComponent<levelcontrol>().round) 
+                {transform.LookAt(new Vector3(kaleler[i].gameObject.transform.position.x,this.gameObject.transform.position.y, kaleler[i].gameObject.transform.position.z)); }
+            } }
+       
+        kaleler = GameObject.FindGameObjectsWithTag("düþmankalesi");
        if (can <= 0) { StartCoroutine(die()); }
        transform.Translate(0, 0, Time.fixedDeltaTime*speed);
        
@@ -22,8 +37,10 @@ public class karakter : MonoBehaviour
     {
         for (int i = 0; i < 100; i++)
         {
+            
             speed -= 0.03f;
             yield return new WaitForSecondsRealtime(0.005f);
+            if (speed <= 0) { speed = 0; }
         }
     }
 
@@ -31,8 +48,9 @@ public class karakter : MonoBehaviour
     {
         if (other.gameObject.tag == "silindir")
         {
-            transform.LookAt(new Vector3(other.gameObject.transform.position.x,this.gameObject.transform.position.y, other.gameObject.transform.position.z));
 
+
+            lookat = true;
 
         }
     }
@@ -42,6 +60,6 @@ public class karakter : MonoBehaviour
         this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
         animator.SetBool("öldü", true);
         yield return new WaitForSecondsRealtime(1);
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 }

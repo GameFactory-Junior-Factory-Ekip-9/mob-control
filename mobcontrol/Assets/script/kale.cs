@@ -1,16 +1,25 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor.UI;
+using TMPro;
 
 
 public class kale : MonoBehaviour
 {
-    [SerializeField] int requiredround;
+    public int requiredround;
+    public GameObject cantext;
     public GameObject lvlcontrol;
     public GameObject düþman;
     public float can;
     public int summonwave;
     public int summoncount;
     public float summonperiod;
+    public int money;
+    
+    public bool died;
+    public GameObject kalebayraðý;
+    public GameObject kalegövdesi;
     private void Awake()
     {
         lvlcontrol = GameObject.FindGameObjectWithTag("lvlcontrol");
@@ -23,8 +32,8 @@ public class kale : MonoBehaviour
     
     void Update()
     {
-
-        if (can <= 0) { StartCoroutine(die()); }
+        cantext.GetComponent<TextMeshProUGUI>().text = can.ToString();
+        if (can <= 0&&!died) { died = true; StartCoroutine(die()); }
     }
     public IEnumerator summon()
     {
@@ -36,7 +45,7 @@ public class kale : MonoBehaviour
                 case 1:
                     for (int i = 0; i < summoncount && lvlcontrol.GetComponent<levelcontrol>().cancontrol; i++)
                     {
-                        GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -4f, Random.Range(-1f, 1f)) / 4, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y, 0));
+                        GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -0.25f,Random.Range(-1f,1f)) / 8, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y-180, 0));
 
                         yield return new WaitForSecondsRealtime(0.01f);
                     }
@@ -44,11 +53,11 @@ public class kale : MonoBehaviour
                 case 2:
                     for (int i = 0; i < summoncount && lvlcontrol.GetComponent<levelcontrol>().cancontrol; i++)
                     {
-                        GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -4f, Random.Range(-1f, 1f)) / 4, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y, 0));
+                        GameObject newenemy = Instantiate(düþman, transform.position + new Vector3(Random.Range(-1f, 1f), -0.25f, Random.Range(-1f, 1f)) / 8, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y-180, 0));
 
                         if (i - 5 == 0)
                         {
-                            newenemy.transform.GetChild(0).gameObject.GetComponent<enemy>().can = 3;
+                            newenemy.GetComponent<enemy>().can = 3;
                         }
                         yield return new WaitForSecondsRealtime(0.01f);
                     }
@@ -73,8 +82,12 @@ public class kale : MonoBehaviour
     }
     public IEnumerator die()
     {
-        
+        cantext.SetActive(false);
+        kalebayraðý.SetActive(false);
+        kalegövdesi.SetActive(false);
+        this.gameObject.GetComponent<BoxCollider>().enabled = false;
+        lvlcontrol.GetComponent<levelcontrol>().paraarttýrtetikleyici(money);
         yield return new WaitForSecondsRealtime(1);
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 }

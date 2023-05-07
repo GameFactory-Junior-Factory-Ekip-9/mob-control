@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class levelcontrol : MonoBehaviour
 {
     public bool cancontrol;
     public int round;
+    [Header("para")]
+    public GameObject alýnmýþparatext;
+    public GameObject paratext;
+    public int para;
+    public float alýnmýþpara;
     [Header("roundgeçiþiboollarý")]
     bool birdenikiye;
     bool ikidenüçe;
@@ -35,9 +41,19 @@ public class levelcontrol : MonoBehaviour
     public GameObject topalaný1;
     public GameObject topalaný2;
     public GameObject topalaný3;
+    [Header("Screens")]
+    public GameObject winscreen;
+    public GameObject losescreen;
+
     private void Start()
     {
-        cancontrol = true;
+        cancontrol = false;
+        if (PlayerPrefs.HasKey("money"))
+        {
+            para = PlayerPrefs.GetInt("money");
+            paratext.GetComponent<TextMeshProUGUI>().text = para.ToString();
+        }
+        
     }
     void Update()
     {
@@ -60,7 +76,7 @@ public class levelcontrol : MonoBehaviour
         enemies= GameObject.FindGameObjectsWithTag("enemyhandler"); 
         for (int i = 0; i < enemies.Length; i++)
         {
-            StartCoroutine(enemies[i].gameObject.transform.GetChild(0).gameObject.GetComponent<enemy>().die());
+            StartCoroutine(enemies[i].gameObject.gameObject.GetComponent<enemy>().die());
         }
       
         for (int i = 0; i < karakterler.Length; i++)
@@ -97,7 +113,7 @@ public class levelcontrol : MonoBehaviour
         enemies = GameObject.FindGameObjectsWithTag("enemyhandler");
         for (int i = 0; i < enemies.Length; i++)
         {
-            StartCoroutine(enemies[i].gameObject.transform.GetChild(0).gameObject.GetComponent<enemy>().die());
+            StartCoroutine(enemies[i].gameObject.GetComponent<enemy>().die());
         }
 
         for (int i = 0; i < karakterler.Length; i++)
@@ -134,7 +150,7 @@ public class levelcontrol : MonoBehaviour
         enemies = GameObject.FindGameObjectsWithTag("enemyhandler");
         for (int i = 0; i < enemies.Length; i++)
         {
-            StartCoroutine(enemies[i].gameObject.transform.GetChild(0).gameObject.GetComponent<enemy>().die());
+            StartCoroutine(enemies[i].gameObject.GetComponent<enemy>().die());
         }
 
         for (int i = 0; i < karakterler.Length; i++)
@@ -149,10 +165,31 @@ public class levelcontrol : MonoBehaviour
         kamera.transform.SetParent(top.transform);
         toptekerleri.transform.DOLocalRotate(new Vector3(0, 90, 0), 1);
         top.transform.DOMove(new Vector3(silindir4.transform.position.x, top.transform.position.y, silindir4.transform.position.z), 3);
-        yield return new WaitForSecondsRealtime(3);
+        yield return new WaitForSecondsRealtime(4);
         kamera.transform.SetParent(null);
         #endregion
 
+
+
+        alýnmýþparatext.GetComponent<TextMeshProUGUI>().text = alýnmýþpara.ToString();
+        PlayerPrefs.SetInt("money", para);
+        winscreen.SetActive(true);
        
+    }
+    public void paraarttýrtetikleyici(int money)
+    {
+        StartCoroutine(this.GetComponent<levelcontrol>().paraarttýr(money));
+
+
+    }
+    public IEnumerator paraarttýr(int money) {
+
+        for (int i = 0; i < money; i++)
+        {
+            alýnmýþpara++;
+            para++;
+            paratext.GetComponent<TextMeshProUGUI>().text = para.ToString();
+            yield return new WaitForSecondsRealtime(0.01f);
+        } 
     }
 }

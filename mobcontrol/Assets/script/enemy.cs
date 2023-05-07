@@ -13,9 +13,9 @@ public class enemy : MonoBehaviour
     private void FixedUpdate()
     {
         if (can <= 0) { StartCoroutine(die()); }
-        this.gameObject.transform.parent.transform.Translate(0, 0, -speed * Time.fixedDeltaTime);
+        this.gameObject.transform.Translate(0, 0, -speed * Time.fixedDeltaTime);
         scale = 0;
-        if (can > 0) {  this.gameObject.transform.parent.transform.localScale =new Vector3(1,1,1)*(1+(can-1)*0.25f); }
+        if (can > 0) {  this.gameObject.transform.localScale =new Vector3(1,1,1)*(1+(can-1)*0.25f)*1.2f; }
       
 
     }
@@ -25,16 +25,9 @@ public class enemy : MonoBehaviour
         speed = 0;
         animator.SetBool("öldü", true);
         yield return new WaitForSecondsRealtime(1);
-        Destroy(this.transform.parent.gameObject);
+        this.gameObject.SetActive(false);
     }
     
     
-    private void OnTriggerEnter(Collider other)
-    {
-        
-        if (other.gameObject.tag == "dostkarakter")
-        {
-            can -= other.gameObject.transform.parent.gameObject.GetComponent<karakter>().hasar;
-        }
-    }
+   
 }
