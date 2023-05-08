@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class karakter : MonoBehaviour
 {
+
+    public bool birinciçarpanaçarptý;
+    public bool ikinciçarpanaçarptý;
     public bool lookat;
     public bool issuper;
     public Animator animator;
     public float speed;
+    public bool speedchanged;
     public float can;
     public float hasar;
     public GameObject[] kaleler;
     public GameObject levelcontrol; 
     private void Awake()
     {
+        
         levelcontrol = GameObject.FindGameObjectWithTag("lvlcontrol");
     }
     private void Start()
@@ -22,6 +27,7 @@ public class karakter : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (issuper) { this.transform.localScale = new Vector3(12.5f, 12.5f, 12.5f) / 30; }
         if (lookat) { for (int i = 0; i < kaleler.Length; i++)
             {
                 if (kaleler[i].GetComponent<kale>().requiredround == levelcontrol.GetComponent<levelcontrol>().round) 
@@ -33,14 +39,18 @@ public class karakter : MonoBehaviour
        transform.Translate(0, 0, Time.fixedDeltaTime*speed);
        
     }
-    IEnumerator slowing()
+   public  IEnumerator slowing()
     {
-        for (int i = 0; i < 100; i++)
-        {
-            
-            speed -= 0.03f;
-            yield return new WaitForSecondsRealtime(0.005f);
-            if (speed <= 0) { speed = 0; }
+        
+            for (int i = 0; i < 100; i++)
+            {
+            if (!speedchanged)
+            {
+
+                speed -= 0.03f;
+                yield return new WaitForSecondsRealtime(0.005f);
+                if (speed <= 0) { speed = 0; }
+            }
         }
     }
 

@@ -27,7 +27,7 @@ public class menu : MonoBehaviour
 
     public void RestarttheLevel()
     {
-        SceneManager.LoadScene("lvl1");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void NexttheLevel()
     {

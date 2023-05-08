@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class top : MonoBehaviour
 {
+    public GameObject ateþetmeanmasyonobjesi;
     public GameObject superbar;
     public float super;
     public GameObject karakter;
@@ -28,7 +29,7 @@ public class top : MonoBehaviour
             if (touch.phase == TouchPhase.Moved) {
 
                 float xposition = (touch.position.x - (Screen.width / 2)) * topspeed / Screen.height;
-                xposition =Mathf.Clamp(xposition,-3,3);
+                xposition =Mathf.Clamp(xposition,-3.5f,3.5f);
                 transform.localPosition = new Vector3(xposition, 0.3f,0);
                 
             }
@@ -36,9 +37,11 @@ public class top : MonoBehaviour
     }
     public void fire() 
     {
-        if (super < 25 && control.GetComponent<levelcontrol>().cancontrol) {super++; }
+if (control.GetComponent<levelcontrol>().cancontrol) {
+            StartCoroutine(this.gameObject.GetComponent<ateþetmeanimasyonu>().ateþetmeobjesininanimasyonu());
+        if (super < 25) {super++; }
         
-        if (control.GetComponent<levelcontrol>().cancontrol) {
+        
             for (int i = 0; i < firecount; i++)
         {
                 GameObject newcharacter = Instantiate(karakter,this.gameObject.transform.position, Quaternion.Euler(0, this.gameObject.transform.rotation.eulerAngles.y + 90, 0));
@@ -50,6 +53,7 @@ public class top : MonoBehaviour
     }
     public void superfire()
     {
+       
         if (super == 25) {
             
             super =0;

@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.UI;
 using TMPro;
 
 
 public class kale : MonoBehaviour
 {
+    public GameObject patlama;
     public int requiredround;
     public GameObject cantext;
     public GameObject lvlcontrol;
@@ -32,7 +32,9 @@ public class kale : MonoBehaviour
     
     void Update()
     {
+        
         cantext.GetComponent<TextMeshProUGUI>().text = can.ToString();
+        if (can <= 0) { cantext.GetComponent<TextMeshProUGUI>().text = "0"; }
         if (can <= 0&&!died) { died = true; StartCoroutine(die()); }
     }
     public IEnumerator summon()
@@ -82,6 +84,19 @@ public class kale : MonoBehaviour
     }
     public IEnumerator die()
     {
+        for (int i = 0; i <50; i++)
+        {
+        
+        this.gameObject.transform.Translate(new Vector3(0.05f, 0,0));
+            yield return new WaitForSecondsRealtime(0.01f);
+        this.gameObject.transform.Translate(new Vector3(-0.1f, 0,0));
+            yield return new WaitForSecondsRealtime(0.01f);
+        this.gameObject.transform.Translate(new Vector3(0.05f, 0, 0));
+        }
+        
+
+        patlama.SetActive(true);
+
         cantext.SetActive(false);
         kalebayraðý.SetActive(false);
         kalegövdesi.SetActive(false);
@@ -89,5 +104,7 @@ public class kale : MonoBehaviour
         lvlcontrol.GetComponent<levelcontrol>().paraarttýrtetikleyici(money);
         yield return new WaitForSecondsRealtime(1);
         this.gameObject.SetActive(false);
+        
     }
+    
 }

@@ -812,7 +812,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5282500917310953359}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -2.5, z: 0}
+  m_LocalPosition: {x: -0.29, y: -2.5, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1191,10 +1191,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cd0449e125ec041a5d2502efdb2eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  "birinci\xE7arpana\xE7arpt\u0131": 0
+  "ikinci\xE7arpana\xE7arpt\u0131": 0
   lookat: 0
-  issuper: 0
+  issuper: 1
   animator: {fileID: 6357010812662140417}
   speed: 5
+  speedchanged: 0
   can: 5
   hasar: 5
   kaleler: []
